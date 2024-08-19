@@ -124,7 +124,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 textStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.customGray,
                                 ),
                               ),
                             ),
@@ -136,14 +135,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: SizedBox(
                               height: 50,
                               child: TextFormField(
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
                                 keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(15),
-                                      
                                     ),
-                                    borderSide: BorderSide()
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFD8E0F0),
+                                    ),
                                   ),
                                 ),
                               ),
