@@ -1,4 +1,4 @@
-import 'package:crm_system/ui/screen/auth/sign_in_screen.dart';
+import 'package:crm_system/ui/screen/auth/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'CRM System',
       theme: ThemeData(fontFamily: "Nunito Sans"),
-      home: const SignInScreen(),
+      home: const SignUpScreen(),
     );
   }
 }

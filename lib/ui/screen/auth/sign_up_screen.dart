@@ -1,16 +1,34 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:crm_system/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pinput/pinput.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   bool visibilityPassword = true;
+
+  final defaultPinTheme = PinTheme(
+    width: 58,
+    height: 48,
+    textStyle: const TextStyle(
+      fontSize: 14,
+      color: AppColors.customGray,
+    ),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: const Color(0xFFD8E0F0),
+      ),
+      borderRadius: BorderRadius.circular(15),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,12 +85,148 @@ class _SignInScreenState extends State<SignInScreen> {
                       const Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Sign In to Woorkroom",
+                          "Valid your phone",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
                             color: AppColors.customBlack,
                           ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        "Mobile number",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.customGray,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                width: 1,
+                                color: const Color(0xFFD8E0F0),
+                              ),
+                            ),
+                            child: const SizedBox(
+                              height: 50,
+                              child: CountryCodePicker(
+                                padding: EdgeInsets.symmetric(horizontal: 0),
+                                textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.customGray,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                      
+                                    ),
+                                    borderSide: BorderSide()
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 27,
+                      ),
+                      const Text(
+                        "Code from SMS",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.customGray,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Pinput(
+                          defaultPinTheme: defaultPinTheme,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 37,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: AppColors.customBlueWhiter,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Column(
+                          children: [
+                            Row(
+                              children: [
+                                Column(
+                                  children: [
+                                    Icon(
+                                      Icons.info,
+                                      color: AppColors.customBlue,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 14,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "SMS was sent to your number",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.customBlue,
+                                      ),
+                                    ),
+                                    Text(
+                                      "+998 94 463 46 39",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.customBlue,
+                                      ),
+                                    ),
+                                    Text(
+                                      "It will be valid for 01:25",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.customBlue,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
                         ),
                       ),
                       const SizedBox(
@@ -114,7 +268,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 25,
                       ),
                       const Text(
-                        "Password",
+                        "Create Password",
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -142,45 +296,11 @@ class _SignInScreenState extends State<SignInScreen> {
                               color: AppColors.customGray,
                             ),
                             suffixIcon: const Icon(
-                              Icons.visibility,
+                              Icons.visibility_outlined,
                               color: AppColors.customGray,
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 27,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.check_box_outline_blank),
-                              ),
-                              const Text(
-                                "Remember me",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.customBlack,
-                                ),
-                              ),
-                            ],
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "Forgot Password?",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.customGray,
-                              ),
-                            ),
-                          )
-                        ],
                       ),
                       const SizedBox(
                         height: 45,
@@ -200,7 +320,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Sign In",
+                                "Sign Up",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
@@ -225,7 +345,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: TextButton(
                           onPressed: () {},
                           child: const Text(
-                            "Don't have an account?",
+                            "Already have an account?",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
