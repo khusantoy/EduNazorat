@@ -1,4 +1,4 @@
-import 'package:crm_system/ui/screen/auth/sign_up_screen.dart';
+import 'package:crm_system/ui/screen/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

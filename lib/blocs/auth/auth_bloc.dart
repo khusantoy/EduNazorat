@@ -1,87 +1,33 @@
-// import 'dart:developer';
+import 'package:crm_system/blocs/auth/interceptor/auth_interceptor.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// import 'package:crm_system/data/models/user.dart';
-// import 'package:equatable/equatable.dart';
-// part 'auth_event.dart';
-// part 'auth_state.dart';
+part 'auth_event.dart';
+part 'auth_state.dart';
 
-// class AuthBloc extends Bloc<AuthEvent, AuthState> {
-//   final AuthService authService;
-//   final _fcmService = FCMService();
-//   final _dioUserService = DioUserService();
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final Dio dio;
 
-//   AuthBloc({required this.authService}) : super(AuthInitial()) {
-//     on<AuthRegister>(_onRegister);
-//     on<AuthSignIn>(_onSignIn);
-//     on<AuthLogout>(_onLogout);
-//     on<CheckTokenExpiry>(_onCheckTokenExpiry);
-//     on<AuthResetPassword>(_onResetPassword);
-//   }
+  AuthBloc(this.dio) : super(AuthInitial()) {
+    on<RegisterEvent>(_onRegister);
+  }
 
-//   Future<void> _onRegister(AuthRegister event, Emitter<AuthState> emit) async {
-//     emit(AuthLoading());
-//     try {
-//       final user = await authService.register(event.email, event.password);
-//       final token = await _fcmService.getToken();
-//       _dioUserService.addUser(
-//         event.username,
-//         event.email,
-//         token,
-//         user.localId,
-//       );
-//       emit(AuthAuthenticated(user));
-//     } on DioException catch (e) {
-//       emit(AuthError(e.response?.data["error"]['message']));
-//     } catch (e) {
-//       emit(AuthError(e.toString()));
-//     }
-//   }
+  Future<void> _onRegister(RegisterEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
 
-//   Future<void> _onResetPassword(
-//       AuthResetPassword event, Emitter<AuthState> emit) async {
-//     try {
-//       await authService.resetPassword(event.email);
-//     } catch (e) {
-//       emit(AuthError(e.toString()));
-//     }
-//   }
+    try {
+      final response = await dio.post("/login", data: {
+        'name': event.name,
+        'phone': event.phone,
+        'password': event.password,
+        'password_confirmation': event.passwordConfirmation,
+      });
 
-//   void _onCheckTokenExpiry(
-//     CheckTokenExpiry event,
-//     Emitter<AuthState> emit,
-//   ) async {
-//     emit(AuthLoading());
-//     try {
-//       final user = await authService.checkTokenExpiry();
-//       if (user != null) {
-//         emit(AuthAuthenticated(user));
-//       } else {
-//         emit(AuthUnauthenticated());
-//       }
-//     } catch (e) {
-//       emit(AuthError(e.toString()));
-//     }
-//   }
-
-//   Future<void> _onSignIn(AuthSignIn event, Emitter<AuthState> emit) async {
-//     emit(AuthLoading());
-//     try {
-//       final user = await authService.signIn(event.email, event.password);
-//       emit(AuthAuthenticated(user));
-//     } on DioException catch (e) {
-//       emit(AuthError(e.response?.data["error"]['message']));
-//     } catch (e) {
-//       emit(AuthError(e.toString()));
-//     }
-//   }
-
-//   Future<void> _onLogout(AuthLogout event, Emitter<AuthState> emit) async {
-//     emit(AuthLoading());
-//     try {
-//       await authService.logout();
-//       emit(AuthUnauthenticated());
-//     } catch (e) {
-//       emit(AuthError(e.toString()));
-//     }
-//   }
-// }
+      final token = response.data['token'];
+      dio.interceptors.add(AuthInterceptor(token));
+      emit(AuthSuccess(token));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
+}
