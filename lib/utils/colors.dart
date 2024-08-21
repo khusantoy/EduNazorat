@@ -7,6 +7,5 @@ class AppColors {
   static const Color customGray = Color(0xFF7D8592);
 
   // colors for textfield
-  static const Color customBorderGray = Color(0xFF7D8592);
-
+  static const Color customBorderGray = Color(0xFFD8E0F0);
 }

@@ -8,10 +8,10 @@ class RegisterEvent extends AuthEvent {
   final String password;
   final String passwordConfirmation;
 
-  RegisterEvent(
-    this.name,
-    this.phone,
-    this.password,
-    this.passwordConfirmation,
-  );
+  RegisterEvent({
+    required this.name,
+    required this.phone,
+    required this.password,
+    required this.passwordConfirmation,
+  });
 }
