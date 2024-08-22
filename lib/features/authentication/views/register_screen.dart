@@ -1,8 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:crm_system/blocs/auth/auth_bloc.dart';
 import 'package:crm_system/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pinput/pinput.dart';
 
@@ -341,22 +339,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             onPressed: () {
-                              final String name = nameController.text;
-                              final String phone = phoneController.text;
-                              final String password = passwordController.text;
-                              final String passwordConfirmation =
-                                  confirmPasswordController.text;
+                              // final String name = nameController.text;
+                              // final String phone = phoneController.text;
+                              // final String password = passwordController.text;
+                              // final String passwordConfirmation =
+                              //     confirmPasswordController.text;
 
-                              if (_formKey.currentState!.validate()) {
-                                BlocProvider.of<AuthBloc>(context).add(
-                                  RegisterEvent(
-                                    name: name,
-                                    phone: phone,
-                                    password: password,
-                                    passwordConfirmation: passwordConfirmation,
-                                  ),
-                                );
-                              }
+                              if (_formKey.currentState!.validate()) {}
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -395,26 +384,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        BlocConsumer<AuthBloc, AuthState>(
-                          listener: (context, state) {
-                            if (state is AuthSuccess) {
-                              
-                            } else if (state is AuthFailure) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Xatolik: ${state.error}'),
-                                ),
-                              );
-                            }
-                          },
-                          builder: (context, state) {
-                            if (state is AuthLoading) {
-                              return const CircularProgressIndicator();
-                            }
-                            return Container();
-                          },
                         ),
                       ],
                     ),

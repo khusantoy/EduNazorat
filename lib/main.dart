@@ -1,45 +1,56 @@
-import 'package:crm_system/blocs/auth/auth_bloc.dart';
-import 'package:crm_system/services/auth_service.dart';
-import 'package:crm_system/ui/screen/auth/register_screen.dart';
-import 'package:dio/dio.dart';
+import 'package:crm_system/features/authentication/bloc/authentication_bloc.dart';
+import 'package:crm_system/features/authentication/views/login_screen.dart';
+import 'package:crm_system/features/home/views/home_screen.dart';
+import 'package:crm_system/features/user/bloc/user_bloc.dart';
+import 'package:crm_system/utils/locator.dart';
+import 'package:crm_system/utils/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'utils/helpers/dialogs.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dependencySetUp();
+  runApp(const MainApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late Dio dio;
-  late AuthService authService;
-
-  @override
-  void initState() {
-    super.initState();
-    dio = Dio();
-    authService = AuthService(dio);
-  }
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => AuthBloc(authService),
-        ),
-      ],
+      providers: providers,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'CRM System',
-        theme: ThemeData(fontFamily: "Nunito Sans"),
-        home: const RegisterScreen(),
+        home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            if (state.isLoading) {
+              AppDialogs.showLoading(context);
+            } else {
+              AppDialogs.hideLoading(context);
+
+              if (state.error != null) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(content: Text(state.error.toString())),
+                  );
+              }
+            }
+
+            if (state.status == AuthenticationStatus.authenticated) {
+              context.read<UserBloc>().add(GetCurrentUserEvent());
+            }
+          },
+          builder: (context, state) {
+            if (state.status == AuthenticationStatus.authenticated) {
+              return const HomeScreen();
+            }
+
+            return const LoginScreen();
+          },
+        ),
       ),
     );
   }
