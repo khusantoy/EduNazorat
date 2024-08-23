@@ -11,6 +11,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool visibilityPassword = true;
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _phoneController.text = "+998";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,227 +30,209 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: AppColors.customBlueWhiter,
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset("assets/images/company_logo.svg"),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    const Text(
-                      "Woorkroom",
-                      style: TextStyle(
-                        color: AppColors.customBlue,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset("assets/images/company_logo.svg"),
+                      const SizedBox(
+                        width: 15,
                       ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(15),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFC4CBD6).withOpacity(0.1),
-                        offset: const Offset(0, 6),
-                        blurRadius: 58,
+                      const Text(
+                        "EduNazorat",
+                        style: TextStyle(
+                          color: AppColors.customBlue,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
                       )
                     ],
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Sign In to Woorkroom",
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFC4CBD6).withOpacity(0.1),
+                          offset: const Offset(0, 6),
+                          blurRadius: 58,
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Dasturga kirish",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.customBlack,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 26,
+                        ),
+                        const Text(
+                          "Telefon Raqam",
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.customBlack,
+                            color: AppColors.customGray,
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 26,
-                      ),
-                      const Text(
-                        "Email Address",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.customGray,
+                        const SizedBox(
+                          height: 7,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 7,
-                      ),
-                      SizedBox(
-                        height: 48,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                width: 1,
-                                color: AppColors.customBorderGray,
-                              ),
-                            ),
-                            hintText: "youremail@gmail.com",
-                            hintStyle: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.customGray,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      const Text(
-                        "Password",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.customGray,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7,
-                      ),
-                      SizedBox(
-                        height: 48,
-                        child: TextFormField(
-                          obscureText: visibilityPassword,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                width: 1,
-                                color: AppColors.customBorderGray,
-                              ),
-                            ),
-                            hintText: "••••••••",
-                            hintStyle: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.customGray,
-                            ),
-                            suffixIcon: const Icon(
-                              Icons.visibility,
-                              color: AppColors.customGray,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 27,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.check_box_outline_blank),
-                              ),
-                              const Text(
-                                "Remember me",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.customBlack,
+                        SizedBox(
+                          height: 48,
+                          child: TextFormField(
+                            controller: _phoneController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
                                 ),
                               ),
-                            ],
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "Forgot Password?",
-                              style: TextStyle(
+                              hintText: "998 90 000 00 00",
+                              hintStyle: const TextStyle(
                                 fontSize: 14,
                                 color: AppColors.customGray,
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 45,
-                      ),
-                      SizedBox(
-                        height: 48,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.customBlue,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
                           ),
-                          onPressed: () {
-                            print("Hello");
-                          },
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text(
+                          "Parol",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.customGray,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 7,
+                        ),
+                        SizedBox(
+                          height: 48,
+                          child: TextFormField(
+                            controller: _passwordController,
+                            obscureText: visibilityPassword,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
                                 ),
                               ),
-                              SizedBox(
-                                width: 7,
+                              hintText: "••••••••",
+                              hintStyle: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.customGray,
                               ),
-                              Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 20,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Don't have an account?",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.customBlue,
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    visibilityPassword = !visibilityPassword;
+                                  });
+                                },
+                                icon: Icon(
+                                  visibilityPassword
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: AppColors.customGray,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                        const SizedBox(
+                          height: 27,
+                        ),
+                        SizedBox(
+                          height: 48,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.customBlue,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            onPressed: () {
+                              print("Hello");
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Kirish",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_rounded,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/register');
+                            },
+                            child: const Text(
+                              "Ro'yhatdan o'tish",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.customBlue,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

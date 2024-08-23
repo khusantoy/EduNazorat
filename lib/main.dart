@@ -1,9 +1,11 @@
 import 'package:crm_system/features/authentication/bloc/authentication_bloc.dart';
 import 'package:crm_system/features/authentication/views/login_screen.dart';
+import 'package:crm_system/features/authentication/views/register_screen.dart';
 import 'package:crm_system/features/home/views/home_screen.dart';
 import 'package:crm_system/features/user/bloc/user_bloc.dart';
 import 'package:crm_system/utils/locator.dart';
 import 'package:crm_system/utils/providers.dart';
+import 'package:crm_system/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'utils/helpers/dialogs.dart';
@@ -22,6 +24,10 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: providers,
       child: MaterialApp(
+        routes: {
+          AppRoutes.login: (context) => const LoginScreen(),
+          AppRoutes.register: (context) => const RegisterScreen(),
+        },
         debugShowCheckedModeBanner: false,
         home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
