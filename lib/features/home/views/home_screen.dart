@@ -20,9 +20,6 @@ class HomeScreen extends StatelessWidget {
         }
         return Scaffold(
           appBar: AppBar(
-            leading: SvgPicture.asset(
-              "assets/images/company_logo.svg",
-            ),
             actions: [
               IconButton(
                 onPressed: () {},
@@ -51,7 +48,31 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          body: Column(),
+          drawer: Drawer(
+            child: DrawerHeader(
+              child: Column(
+                children: [
+                  const Text("Admin Panel"),
+                  ListTile(
+                    onTap: () {},
+                    leading: const Icon(Icons.people),
+                    title: const Text("O'qituvchilar"),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    leading: const Icon(Icons.people),
+                    title: const Text("O'quvchilar"),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    leading: const Icon(Icons.admin_panel_settings),
+                    title: const Text("Adminlar"),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          body: const SizedBox(),
         );
       },
     );

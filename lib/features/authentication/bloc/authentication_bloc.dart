@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:crm_system/data/models/auth/login_request.dart';
 import 'package:crm_system/data/models/auth/register_request.dart';
 import 'package:crm_system/domain/authentication_repository/authentication_repository.dart';
@@ -36,7 +38,7 @@ class AuthenticationBloc
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: e.toString(),
+        error: e as Map<String, dynamic>,
       ));
     }
   }
@@ -56,7 +58,7 @@ class AuthenticationBloc
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: e.toString(),
+        error: e,
       ));
     }
   }
@@ -76,7 +78,7 @@ class AuthenticationBloc
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: e.toString(),
+        error: e as Map<String, dynamic>,
       ));
     }
   }
@@ -98,7 +100,7 @@ class AuthenticationBloc
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: e.toString(),
+        error: e as Map<String, dynamic>,
       ));
     }
   }

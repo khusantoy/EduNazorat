@@ -37,10 +37,27 @@ class MainApp extends StatelessWidget {
               AppDialogs.hideLoading(context);
 
               if (state.error != null) {
+                Map<String, dynamic> error =
+                    state.error as Map<String, dynamic>;
+
+                String errorMessage = '';
+
+                if (error['data'].containsKey('password')) {
+                  errorMessage = error['data']['password'][0];
+                } else if (error['data'].containsKey('password_confirmation')) {
+                  errorMessage = error['data']['password_confirmation'][0];
+                } else if (error['data'].containsKey('phone')) {
+                  errorMessage = error['data']['phone'][0];
+                } else if (error['data'].containsKey('error')) {
+                  errorMessage = error['data']['error'];
+                }
+
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
-                    SnackBar(content: Text(state.error.toString())),
+                    SnackBar(
+                      content: Text(errorMessage),
+                    ),
                   );
               }
             }

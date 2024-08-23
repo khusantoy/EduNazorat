@@ -1,5 +1,9 @@
+import 'package:crm_system/data/models/auth/login_request.dart';
+import 'package:crm_system/features/authentication/bloc/authentication_bloc.dart';
 import 'package:crm_system/utils/colors.dart';
+import 'package:crm_system/utils/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -102,27 +106,33 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 7,
                         ),
-                        SizedBox(
-                          height: 48,
-                          child: TextFormField(
-                            controller: _phoneController,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: AppColors.customBorderGray,
-                                ),
-                              ),
-                              hintText: "998 90 000 00 00",
-                              hintStyle: const TextStyle(
-                                fontSize: 14,
-                                color: AppColors.customGray,
+                        TextFormField(
+                          controller: _phoneController,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: AppColors.customBorderGray,
                               ),
                             ),
+                            hintText: "998 90 000 00 00",
+                            hintStyle: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.customGray,
+                            ),
                           ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (value!.isEmpty || value == "+998") {
+                              return "Raqam kiritilmadi";
+                            } else if (int.tryParse(value) == null) {
+                              return "Ma'lumot xato";
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(
                           height: 15,
@@ -138,39 +148,43 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 7,
                         ),
-                        SizedBox(
-                          height: 48,
-                          child: TextFormField(
-                            controller: _passwordController,
-                            obscureText: visibilityPassword,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: AppColors.customBorderGray,
-                                ),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: visibilityPassword,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: AppColors.customBorderGray,
                               ),
-                              hintText: "••••••••",
-                              hintStyle: const TextStyle(
-                                fontSize: 14,
+                            ),
+                            hintText: "••••••••",
+                            hintStyle: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.customGray,
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  visibilityPassword = !visibilityPassword;
+                                });
+                              },
+                              icon: Icon(
+                                visibilityPassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                                 color: AppColors.customGray,
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    visibilityPassword = !visibilityPassword;
-                                  });
-                                },
-                                icon: Icon(
-                                  visibilityPassword
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: AppColors.customGray,
-                                ),
                               ),
                             ),
                           ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Parol kiritilmadi";
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(
                           height: 27,
@@ -186,7 +200,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             onPressed: () {
-                              print("Hello");
+                              if (_formKey.currentState!.validate()) {
+                                final phone = _phoneController.text;
+                                final password = _passwordController.text;
+                                context.read<AuthenticationBloc>().add(
+                                      LoginEvent(
+                                        request: LoginRequest(
+                                          phone: phone,
+                                          password: password,
+                                        ),
+                                      ),
+                                    );
+                              }
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,

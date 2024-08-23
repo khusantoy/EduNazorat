@@ -1,4 +1,3 @@
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:crm_system/data/models/auth/register_request.dart';
 import 'package:crm_system/features/authentication/bloc/authentication_bloc.dart';
 import 'package:crm_system/utils/colors.dart';
@@ -165,6 +164,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 color: AppColors.customGray,
                               ),
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Ismingizni kiriting";
@@ -214,6 +215,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               ),
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Raqamingizni kiriting";
@@ -274,6 +277,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               ),
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Parol yarating";
@@ -333,6 +338,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               ),
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Parolni tasdiqlang";

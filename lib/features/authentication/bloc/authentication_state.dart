@@ -5,7 +5,7 @@ enum AuthenticationStatus { initial, authenticated, unauthenticated }
 class AuthenticationState extends Equatable {
   final AuthenticationStatus status;
   final bool isLoading;
-  final String? error;
+  final Object? error;
 
   const AuthenticationState({
     this.status = AuthenticationStatus.initial,
@@ -16,7 +16,7 @@ class AuthenticationState extends Equatable {
   AuthenticationState copyWith({
     AuthenticationStatus? status,
     bool? isLoading,
-    String? error,
+    Object? error,
   }) {
     return AuthenticationState(
       status: status ?? this.status,
