@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "223859585692",
+    "project_id": "panda-83006",
+    "storage_bucket": "panda-83006.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223859585692:android:8a8feaf25cd990f9a27359",
+        "android_client_info": {
+          "package_name": "com.example.crm_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXET8n9y6DBVvxDa6QmMqFaZaNaZ7OxgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

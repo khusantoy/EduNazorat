@@ -9,6 +9,8 @@ class User extends Equatable {
   final String? email;
   final String phone;
   final String? photo;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final int roleId;
   final Role role;
   const User({
@@ -17,6 +19,8 @@ class User extends Equatable {
     this.email,
     required this.phone,
     this.photo,
+    required this.createdAt,
+    required this.updatedAt,
     required this.roleId,
     required this.role,
   });
@@ -27,6 +31,8 @@ class User extends Equatable {
     String? email,
     String? phone,
     String? photo,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     int? roleId,
     Role? role,
   }) {
@@ -36,6 +42,8 @@ class User extends Equatable {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       photo: photo ?? this.photo,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       roleId: roleId ?? this.roleId,
       role: role ?? this.role,
     );
@@ -49,7 +57,7 @@ class User extends Equatable {
     result.addAll({'email': email});
     result.addAll({'phone': phone});
     result.addAll({'photo': photo});
-    result.addAll({'roleId': roleId});
+    result.addAll({'role_id': roleId});
     result.addAll({'role': role.toMap()});
 
     return result;
@@ -62,7 +70,9 @@ class User extends Equatable {
       email: map['email'] ?? '',
       phone: map['phone'] ?? '',
       photo: map['photo'] ?? '',
-      roleId: map['roleId']?.toInt() ?? 0,
+      createdAt: DateTime.parse(map['created_at']),
+      updatedAt: DateTime.parse(map['updated_at']),
+      roleId: map['role_id']?.toInt() ?? 0,
       role: Role.fromMap(map['role']),
     );
   }

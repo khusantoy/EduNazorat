@@ -31,7 +31,7 @@ Future<void> dependencySetUp() async {
       userService: getIt.get<UserService>(),
     ),
   );
-
+ 
   // BLOCS
   getIt.registerLazySingleton<UserBloc>(
     () => UserBloc(

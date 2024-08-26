@@ -11,4 +11,16 @@ class UserRepository {
   Future<User> getUser() async {
     return await _userService.getUser();
   }
+
+  Future<List<User>> getStudents() async {
+    return await _userService.getStudents();
+  }
+
+  Future<List<User>> getTeachers() async {
+    return await _userService.getTeachers();
+  }
+
+  Future<List<User>> getAdmins() async {
+    return await _userService.getAdmins();
+  }
 }
