@@ -57,7 +57,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     try {
       final admins = await _userRepository.getAdmins();
-      emit(state.copyWith(students: admins, isLoading: false));
+      emit(state.copyWith(admins: admins, isLoading: false));
     } catch (e) {
       emit(state.copyWith(error: e.toString(), isLoading: false));
     }

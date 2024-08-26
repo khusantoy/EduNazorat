@@ -24,57 +24,59 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: providers,
       child: MaterialApp(
-        routes: {
-          AppRoutes.login: (context) => const LoginScreen(),
-          AppRoutes.register: (context) => const RegisterScreen(),
-        },
-        debugShowCheckedModeBanner: false,
-        home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state.isLoading) {
-              AppDialogs.showLoading(context);
-            } else {
-              AppDialogs.hideLoading(context);
+          routes: {
+            AppRoutes.login: (context) => const LoginScreen(),
+            AppRoutes.register: (context) => const RegisterScreen(),
+          },
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+            body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                if (state.isLoading) {
+                  AppDialogs.showLoading(context);
+                } else {
+                  AppDialogs.hideLoading(context);
 
-              if (state.error != null) {
-                Map<String, dynamic> error =
-                    state.error as Map<String, dynamic>;
+                  if (state.error != null) {
+                    Map<String, dynamic> error =
+                        state.error as Map<String, dynamic>;
 
-                String errorMessage = '';
+                    String errorMessage = '';
 
-                if (error['data'].containsKey('password')) {
-                  errorMessage = error['data']['password'][0];
-                } else if (error['data'].containsKey('password_confirmation')) {
-                  errorMessage = error['data']['password_confirmation'][0];
-                } else if (error['data'].containsKey('phone')) {
-                  errorMessage = error['data']['phone'][0];
-                } else if (error['data'].containsKey('error')) {
-                  errorMessage = error['data']['error'];
+                    if (error['data'].containsKey('password')) {
+                      errorMessage = error['data']['password'][0];
+                    } else if (error['data']
+                        .containsKey('password_confirmation')) {
+                      errorMessage = error['data']['password_confirmation'][0];
+                    } else if (error['data'].containsKey('phone')) {
+                      errorMessage = error['data']['phone'][0];
+                    } else if (error['data'].containsKey('error')) {
+                      errorMessage = error['data']['error'];
+                    }
+
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Text(errorMessage),
+                        ),
+                      );
+                  }
                 }
 
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                    SnackBar(
-                      content: Text(errorMessage),
-                    ),
-                  );
-              }
-            }
+                if (state.status == AuthenticationStatus.authenticated) {
+                  context.read<UserBloc>().add(GetCurrentUserEvent());
+                }
+              },
+              builder: (context, state) {
+                if (state.status == AuthenticationStatus.authenticated) {
+                  return const HomeScreen();
+                }
 
-            if (state.status == AuthenticationStatus.authenticated) {
-              context.read<UserBloc>().add(GetCurrentUserEvent());
-            }
-          },
-          builder: (context, state) {
-            if (state.status == AuthenticationStatus.authenticated) {
-              return const HomeScreen();
-            }
-
-            return const LoginScreen();
-          },
-        ),
-      ),
+                return const LoginScreen();
+              },
+            ),
+          )),
     );
   }
 }
