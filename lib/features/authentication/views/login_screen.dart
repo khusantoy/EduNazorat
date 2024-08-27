@@ -1,7 +1,6 @@
 import 'package:crm_system/data/models/auth/login_request.dart';
 import 'package:crm_system/features/authentication/bloc/authentication_bloc.dart';
 import 'package:crm_system/utils/colors.dart';
-import 'package:crm_system/utils/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -253,6 +252,38 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton.outlined(
+                              onPressed: () {},
+                              icon: Image.asset(
+                                "assets/images/google.png",
+                                width: 20,
+                                height: 20,
+                              ),
+                            ),
+                            IconButton.outlined(
+                              onPressed: () {},
+                              icon: Image.asset(
+                                "assets/images/facebook.png",
+                                width: 20,
+                                height: 20,
+                              ),
+                            ),
+                            IconButton.outlined(
+                              onPressed: () {},
+                              icon: Image.asset(
+                                "assets/images/github.png",
+                                width: 20,
+                                height: 20,
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   )
