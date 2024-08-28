@@ -4,6 +4,7 @@ import 'package:crm_system/utils/network/dio_client.dart';
 
 abstract class AuthenticationServiceInterface {
   Future<AuthenticationResponse> login(LoginRequest request);
+  Future<AuthenticationResponse> socialLogin(SocialLoginRequest request);
   Future<AuthenticationResponse> register(RegisterRequest request);
   Future<void> logout();
 }
@@ -16,6 +17,21 @@ class AuthenticationService extends AuthenticationServiceInterface {
     try {
       final response = await dio.post(
         '/login',
+        data: request.toMap(),
+      );
+      return AuthenticationResponse.fromMap(response.data['data']);
+    } on DioException catch (e) {
+      throw (e.response?.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AuthenticationResponse> socialLogin(SocialLoginRequest request) async {
+    try {
+      final response = await dio.post(
+        '/social-login',
         data: request.toMap(),
       );
       return AuthenticationResponse.fromMap(response.data['data']);

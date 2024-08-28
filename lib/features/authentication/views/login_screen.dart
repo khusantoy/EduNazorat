@@ -3,7 +3,9 @@ import 'package:crm_system/features/authentication/bloc/authentication_bloc.dart
 import 'package:crm_system/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:github_oauth/github_oauth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -259,7 +261,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton.outlined(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.read<AuthenticationBloc>().add(
+                                    SocialLoginEvent(
+                                        type: SocialLoginTypes.google));
+                              },
                               icon: Image.asset(
                                 "assets/images/google.png",
                                 width: 20,
@@ -267,7 +273,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             IconButton.outlined(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.read<AuthenticationBloc>().add(
+                                    SocialLoginEvent(
+                                        type: SocialLoginTypes.facebook));
+                              },
                               icon: Image.asset(
                                 "assets/images/facebook.png",
                                 width: 20,
@@ -275,13 +285,31 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             IconButton.outlined(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final gitHubSignIn = GitHubSignIn(
+                                  clientId:  dotenv.env['GITHUB_CLIENT_ID']!,
+                                  clientSecret: dotenv.env['GITHUB_CLIENT_SECRET']!,
+                                  redirectUrl: dotenv.env['GITHUB_REDIRECT_URL']!,
+                                );
+
+                                final result = await gitHubSignIn.signIn(context);
+
+                                if (result.status == GitHubSignInResultStatus.ok) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Token: ${result.token}')),
+                                  );
+                                  print("Access Token: ${result.token}");
+                                  print("User Profile: ${result.userProfile}");
+                                } else {
+                                  print("Sign In Failed: ${result.errorMessage}");
+                                }
+                              },
                               icon: Image.asset(
                                 "assets/images/github.png",
                                 width: 20,
                                 height: 20,
                               ),
-                            )
+                            ),
                           ],
                         )
                       ],

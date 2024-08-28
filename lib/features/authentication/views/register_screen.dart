@@ -4,7 +4,6 @@ import 'package:crm_system/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pinput/pinput.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -37,21 +36,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.initState();
     phoneController.text = "+998";
   }
-
-  final defaultPinTheme = PinTheme(
-    width: 58,
-    height: 48,
-    textStyle: const TextStyle(
-      fontSize: 14,
-      color: AppColors.customGray,
-    ),
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xFFD8E0F0),
-      ),
-      borderRadius: BorderRadius.circular(15),
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -482,6 +466,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton.outlined(
+                                onPressed: () {
+                                  context.read<AuthenticationBloc>().add(
+                                        SocialLoginEvent(
+                                            type: SocialLoginTypes.google),
+                                      );
+                                },
+                                icon: Image.asset(
+                                  "assets/images/google.png",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                              IconButton.outlined(
+                                onPressed: () {
+                                  context.read<AuthenticationBloc>().add(
+                                        SocialLoginEvent(
+                                            type: SocialLoginTypes.facebook),
+                                      );
+                                },
+                                icon: Image.asset(
+                                  "assets/images/facebook.png",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                              IconButton.outlined(
+                                onPressed: () {
+                                  context.read<AuthenticationBloc>().add(
+                                        SocialLoginEvent(
+                                            type: SocialLoginTypes.github),
+                                      );
+                                },
+                                icon: Image.asset(
+                                  "assets/images/github.png",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     )

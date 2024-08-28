@@ -14,6 +14,12 @@ final class RegisterEvent extends AuthenticationEvent {
   RegisterEvent({required this.request});
 }
 
+final class SocialLoginEvent extends AuthenticationEvent {
+  final SocialLoginTypes type;
+
+  SocialLoginEvent({required this.type});
+}
+
 final class CheckAuthStatusEvent extends AuthenticationEvent {}
 
 final class LogoutEvent extends AuthenticationEvent {}

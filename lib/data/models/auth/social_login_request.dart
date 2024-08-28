@@ -1,37 +1,49 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
-class LoginRequest extends Equatable {
-  final String phone;
-  final String password;
+class SocialLoginRequest extends Equatable {
+  final String name;
+  final String email;
+  const SocialLoginRequest({
+    required this.name,
+    required this.email,
+  });
 
-  const LoginRequest({required this.phone, required this.password});
-
-  LoginRequest copyWith({
-    String? phone,
-    String? password,
+  SocialLoginRequest copyWith({
+    String? name,
+    String? email,
   }) {
-    return LoginRequest(
-      phone: phone ?? this.phone,
-      password: password ?? this.password,
+    return SocialLoginRequest(
+      name: name ?? this.name,
+      email: email ?? this.email,
     );
   }
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
-    result.addAll({'phone': phone});
-    result.addAll({'password': password});
+    result.addAll({'name': name});
+    result.addAll({'email': email});
 
     return result;
   }
 
-  factory LoginRequest.fromMap(Map<String, dynamic> map) {
-    return LoginRequest(
-      phone: map['phone'] ?? '',
-      password: map['password'] ?? '',
+  factory SocialLoginRequest.fromMap(Map<String, dynamic> map) {
+    return SocialLoginRequest(
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
     );
   }
 
+  String toJson() => json.encode(toMap());
+
+  factory SocialLoginRequest.fromJson(String source) =>
+      SocialLoginRequest.fromMap(json.decode(source));
+
   @override
-  List<Object> get props => [phone, password];
+  String toString() => 'SocialLoginRequest(name: $name, email: $email)';
+
+  @override
+  List<Object> get props => [name, email];
 }

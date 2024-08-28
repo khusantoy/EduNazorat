@@ -3,15 +3,26 @@ import 'package:crm_system/features/authentication/views/login_screen.dart';
 import 'package:crm_system/features/authentication/views/register_screen.dart';
 import 'package:crm_system/features/home/views/home_screen.dart';
 import 'package:crm_system/features/user/bloc/user_bloc.dart';
+import 'package:crm_system/firebase_options.dart';
 import 'package:crm_system/utils/locator.dart';
 import 'package:crm_system/utils/providers.dart';
 import 'package:crm_system/utils/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'utils/helpers/dialogs.dart';
 
 void main() async {
+
+  await dotenv.load();
+
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await dependencySetUp();
   runApp(const MainApp());
 }

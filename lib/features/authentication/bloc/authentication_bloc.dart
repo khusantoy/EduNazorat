@@ -1,13 +1,14 @@
-import 'dart:convert';
-
-import 'package:crm_system/data/models/auth/login_request.dart';
-import 'package:crm_system/data/models/auth/register_request.dart';
-import 'package:crm_system/domain/authentication_repository/authentication_repository.dart';
+import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:crm_system/data/models/models.dart';
+import 'package:crm_system/domain/authentication_repository/authentication_repository.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
+
+enum SocialLoginTypes { google, facebook, github }
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -18,15 +19,16 @@ class AuthenticationBloc
   })  : _authenticationRepository = authenticationRepository,
         super(const AuthenticationState()) {
     on<LoginEvent>(_onLogin);
+    on<SocialLoginEvent>(_onSocialLogin);
     on<RegisterEvent>(_onRegister);
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
     on<LogoutEvent>(_onLogout);
   }
 
   void _onLogin(
-    LoginEvent event,
-    Emitter<AuthenticationState> emit,
-  ) async {
+      LoginEvent event,
+      Emitter<AuthenticationState> emit,
+      ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
@@ -38,15 +40,68 @@ class AuthenticationBloc
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: e as Map<String, dynamic>,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  void _onSocialLogin(
+      SocialLoginEvent event,
+      Emitter<AuthenticationState> emit,
+      ) async {
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      SocialLoginRequest? request;
+      switch (event.type) {
+        case SocialLoginTypes.google:
+          const List<String> scopes = <String>['email'];
+          final googleSignIn = GoogleSignIn(scopes: scopes);
+          final googleUser = await googleSignIn.signIn();
+          if (googleUser != null) {
+            request = SocialLoginRequest(
+              name: googleUser.displayName ?? '',
+              email: googleUser.email,
+            );
+          }
+          break;
+        case SocialLoginTypes.facebook:
+          final result = await FacebookAuth.instance.login();
+          if (result.status == LoginStatus.success) {
+            final userData = await FacebookAuth.i.getUserData(
+              fields: "name,email",
+            );
+            request = SocialLoginRequest(
+              name: userData['name'] ?? '',
+              email: userData['email'],
+            );
+          }
+          break;
+        default:
+          return;
+      }
+
+      if (request != null) {
+        await _authenticationRepository.socialLogin(request);
+        emit(state.copyWith(
+          status: AuthenticationStatus.authenticated,
+          isLoading: false,
+        ));
+      } else {
+        throw ('User not found');
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: e.toString(),
       ));
     }
   }
 
   void _onRegister(
-    RegisterEvent event,
-    Emitter<AuthenticationState> emit,
-  ) async {
+      RegisterEvent event,
+      Emitter<AuthenticationState> emit,
+      ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
@@ -58,15 +113,15 @@ class AuthenticationBloc
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: e,
+        error: e.toString(),
       ));
     }
   }
 
   void _onLogout(
-    LogoutEvent event,
-    Emitter<AuthenticationState> emit,
-  ) async {
+      LogoutEvent event,
+      Emitter<AuthenticationState> emit,
+      ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
@@ -78,15 +133,15 @@ class AuthenticationBloc
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: e as Map<String, dynamic>,
+        error: e.toString(),
       ));
     }
   }
 
   void _onCheckAuthStatus(
-    CheckAuthStatusEvent event,
-    Emitter<AuthenticationState> emit,
-  ) async {
+      CheckAuthStatusEvent event,
+      Emitter<AuthenticationState> emit,
+      ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
@@ -100,7 +155,7 @@ class AuthenticationBloc
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: e as Map<String, dynamic>,
+        error: e.toString(),
       ));
     }
   }
