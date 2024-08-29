@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'group_bloc.dart';
 
 sealed class GroupEvent extends Equatable {
   @override
@@ -6,7 +6,9 @@ sealed class GroupEvent extends Equatable {
 }
 
 class GetGroupsEvent extends GroupEvent {}
+
 class GetStudentGroupsEvent extends GroupEvent {}
+
 class GetTeacherGroupsEvent extends GroupEvent {}
 
 class UpdateGroupEvent extends GroupEvent {
@@ -22,6 +24,7 @@ class UpdateGroupEvent extends GroupEvent {
     required this.assistantTeacherId,
   });
 }
+
 class DeleteGroupEvent extends GroupEvent {
   final int groupId;
 

@@ -47,8 +47,6 @@ dependencies:
   bloc: ^8.1.4
   flutter_facebook_auth: ^7.0.1
   firebase_auth: ^4.20.0
-  github_oauth:
-    path: ../github_oauth
   flutter_dotenv: ^5.1.0
 
 dev_dependencies:

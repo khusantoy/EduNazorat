@@ -1,10 +1,10 @@
-// ignore_for_file: avoid_print
-
+import 'package:crm_system/data/models/group/group.dart';
+import 'package:crm_system/data/services/group/group_service.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vazifa/blocs/group_bloc/group_event.dart';
-import 'package:vazifa/blocs/group_bloc/group_state.dart';
-import 'package:vazifa/data/model/group_model.dart';
-import 'package:vazifa/data/services/group_service.dart';
+
+part 'group_event.dart';
+part 'group_state.dart';
 
 class GroupBloc extends Bloc<GroupEvent, GroupState> {
   GroupBloc() : super(GroupInitialState()) {
@@ -22,18 +22,16 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     final GroupService groupService = GroupService();
     try {
       final response = await groupService.getGroups();
-      List<GroupModel> groups = [];
+      List<Group> groups = [];
       print(response['data']);
-      print("++++++++++++++++++++++++++++++++++");
 
       response['data'].forEach((value) {
-        groups.add(GroupModel.fromMap(value));
+        groups.add(Group.fromMap(value));
       });
 
       emit(GroupLoadedState(groups: groups));
     } catch (e) {
       print(e);
-      print("-------------");
       emit(GroupErrorState(error: e.toString()));
     }
   }
@@ -43,10 +41,10 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     final GroupService groupService = GroupService();
     try {
       final response = await groupService.getStudentGroups();
-      List<GroupModel> groups = [];
+      List<Group> groups = [];
 
       response['data'].forEach((value) {
-        groups.add(GroupModel.fromMap(value));
+        groups.add(Group.fromMap(value));
       });
 
       emit(GroupLoadedState(groups: groups));
@@ -60,10 +58,10 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     final GroupService groupService = GroupService();
     try {
       final response = await groupService.getTeacherGroups();
-      List<GroupModel> groups = [];
+      List<Group> groups = [];
 
       response['data'].forEach((value) {
-        groups.add(GroupModel.fromMap(value));
+        groups.add(Group.fromMap(value));
       });
 
       emit(GroupLoadedState(groups: groups));
