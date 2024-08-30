@@ -2,8 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:crm_system/data/models/models.dart';
-import 'package:crm_system/domain/authentication_repository/authentication_repository.dart';
+import 'package:millima/data/models/models.dart';
+import 'package:millima/data/services/user/user_service.dart';
+import 'package:millima/domain/authentication_repository/authentication_repository.dart';
+import 'package:millima/utils/di/locator.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -26,15 +28,17 @@ class AuthenticationBloc
   }
 
   void _onLogin(
-      LoginEvent event,
-      Emitter<AuthenticationState> emit,
-      ) async {
+    LoginEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
       await _authenticationRepository.login(event.request);
+      final user = await getIt.get<UserService>().getUser();
       emit(state.copyWith(
         status: AuthenticationStatus.authenticated,
+        user: user,
         isLoading: false,
       ));
     } catch (e) {
@@ -46,9 +50,9 @@ class AuthenticationBloc
   }
 
   void _onSocialLogin(
-      SocialLoginEvent event,
-      Emitter<AuthenticationState> emit,
-      ) async {
+    SocialLoginEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
@@ -83,8 +87,10 @@ class AuthenticationBloc
 
       if (request != null) {
         await _authenticationRepository.socialLogin(request);
+        final user = await getIt.get<UserService>().getUser();
         emit(state.copyWith(
           status: AuthenticationStatus.authenticated,
+          user: user,
           isLoading: false,
         ));
       } else {
@@ -99,15 +105,17 @@ class AuthenticationBloc
   }
 
   void _onRegister(
-      RegisterEvent event,
-      Emitter<AuthenticationState> emit,
-      ) async {
+    RegisterEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
       await _authenticationRepository.register(event.request);
+      final user = await getIt.get<UserService>().getUser();
       emit(state.copyWith(
         status: AuthenticationStatus.authenticated,
+        user: user,
         isLoading: false,
       ));
     } catch (e) {
@@ -119,9 +127,9 @@ class AuthenticationBloc
   }
 
   void _onLogout(
-      LogoutEvent event,
-      Emitter<AuthenticationState> emit,
-      ) async {
+    LogoutEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
@@ -139,17 +147,22 @@ class AuthenticationBloc
   }
 
   void _onCheckAuthStatus(
-      CheckAuthStatusEvent event,
-      Emitter<AuthenticationState> emit,
-      ) async {
+    CheckAuthStatusEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true));
 
     try {
       final isLoggedIn = await _authenticationRepository.checkAuthStatus();
+      User? user;
+      if (isLoggedIn) {
+        user = await getIt.get<UserService>().getUser();
+      }
       emit(state.copyWith(
         status: isLoggedIn
             ? AuthenticationStatus.authenticated
             : AuthenticationStatus.unauthenticated,
+        user: user,
         isLoading: false,
       ));
     } catch (e) {

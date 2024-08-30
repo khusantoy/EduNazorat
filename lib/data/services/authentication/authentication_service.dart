@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:crm_system/data/models/models.dart';
-import 'package:crm_system/utils/network/dio_client.dart';
+import 'package:millima/data/models/models.dart';
+import 'package:millima/utils/network/dio_client.dart';
 
 abstract class AuthenticationServiceInterface {
   Future<AuthenticationResponse> login(LoginRequest request);

@@ -35,6 +35,10 @@ class Role extends Equatable {
     );
   }
 
+  factory Role.teacher() {
+    return const Role(id: 2, name: 'teacher');
+  }
+
   @override
   List<Object> get props => [id, name];
 }

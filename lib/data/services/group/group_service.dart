@@ -1,98 +1,68 @@
-import 'package:crm_system/data/services/authentication/authentication_interceptor.dart';
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
+import 'package:millima/data/models/group/group_model.dart';
+import 'package:millima/utils/network/dio_client.dart';
 
 class GroupService {
-  final Dio dio;
-
-  GroupService() : dio = Dio() {
-    dio.interceptors.add(AuthenticationInterceptor());
-  }
+  final dio = DioClient.dio;
 
   Future<void> addGroup(String name, int mainTeacherId, int assistantTeacherId,
       int subjectId) async {
     try {
-      dio.options.headers['Content-Type'] = 'application/json';
-
       final data = {
         "name": name,
         "main_teacher_id": mainTeacherId,
         "assistant_teacher_id": assistantTeacherId,
-        "subject_id": subjectId
+        "subject_id": subjectId,
       };
 
       final response = await dio.post(
-        'http://millima.flutterwithakmaljon.uz/api/groups',
+        '/groups',
         data: data,
       );
+
+      print(response);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print('Group added successfully');
       } else {
-        print('Failed to add group: ${response.statusCode}');
         throw 'Failed to add group: ${response.statusCode}';
       }
+    } on DioException catch (e) {
+      throw (e.response?.data);
     } catch (e) {
-      print('Error adding group: $e');
+      rethrow;
     }
   }
 
   Future<Map<String, dynamic>> getGroups() async {
     try {
       final response = await dio.get(
-        'http://millima.flutterwithakmaljon.uz/api/groups',
+        '/groups',
       );
 
       if (response.data['success'] == false) {
         throw response.data;
       }
       return response.data;
+    } on DioException catch (e) {
+      throw (e.response?.data);
     } catch (e) {
-      print('Error adding group: $e');
-      rethrow;
-    }
-  }
-
-  Future<Map<String, dynamic>> getStudentGroups() async {
-    try {
-      final response = await dio.get(
-        'http://millima.flutterwithakmaljon.uz/api/student/groups',
-      );
-
-      if (response.data['success'] == false) {
-        throw response.data;
-      }
-      return response.data;
-    } catch (e) {
-      print('Error adding group: $e');
-      rethrow;
-    }
-  }
-
-  Future<Map<String, dynamic>> getTeacherGroups() async {
-    try {
-      final response = await dio.get(
-        'http://millima.flutterwithakmaljon.uz/api/teacher/groups',
-      );
-
-      if (response.data['success'] == false) {
-        throw response.data;
-      }
-      return response.data;
-    } catch (e) {
-      print('Error adding group: $e');
       rethrow;
     }
   }
 
   Future<void> updateGroup(int groupId, String name, int mainTeacherId,
-      int assistantTeacherId) async {
+      int assistantTeacherId, int subjectId) async {
     try {
       final response = await dio.put(
-        'http://millima.flutterwithakmaljon.uz/api/groups/$groupId',
+        '/groups/$groupId',
         data: {
           'name': name,
           'main_teacher_id': mainTeacherId,
           'assistant_teacher_id': assistantTeacherId,
+          'subject_id': subjectId,
         },
       );
 
@@ -101,31 +71,18 @@ class GroupService {
       } else {
         print('Failed to update group: ${response.statusCode}');
       }
+    } on DioException catch (e) {
+      throw (e.response?.data);
     } catch (e) {
       print('Error: $e');
-    }
-  }
-
-  Future<void> deleteGroup(int groupId) async {
-    try {
-      final response = await dio.delete(
-        'http://millima.flutterwithakmaljon.uz/api/groups/$groupId',
-      );
-
-      if (response.statusCode == 200) {
-        print('Group deleted successfully');
-      } else {
-        print('Failed to delete group: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error: $e');
+      rethrow;
     }
   }
 
   Future<void> addStudentsToGroup(int groupId, List studentIds) async {
     try {
       final response = await dio.post(
-        'http://millima.flutterwithakmaljon.uz/api/groups/$groupId/students',
+        '/groups/$groupId/students',
         data: {
           'students': studentIds,
         },
@@ -136,8 +93,48 @@ class GroupService {
       } else {
         print('Failed to add students: ${response.statusCode}');
       }
+    } on DioException catch (e) {
+      throw (e.response?.data);
     } catch (e) {
       print('Error: $e');
+    }
+  }
+
+  Future<List<GroupModel>> getStudentGroups() async {
+    try {
+      final response = await dio.get("/student/groups");
+
+      List<GroupModel> loadedGroups = [];
+
+      for (var group in response.data['data']) {
+        loadedGroups.add(GroupModel.fromJson(group));
+      }
+
+      return loadedGroups;
+    } on DioException catch (error) {
+      throw error.response?.data;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<GroupModel>> getTeacherGroups() async {
+    try {
+      final response = await dio.get("/teacher/groups");
+
+      print("teacher response: ${response.data['data']}");
+
+      List<GroupModel> loadedGroups = [];
+
+      for (var group in response.data['data']) {
+        loadedGroups.add(GroupModel.fromJson(group));
+      }
+
+      return loadedGroups;
+    } on DioException catch (error) {
+      throw error.response?.data;
+    } catch (error) {
+      rethrow;
     }
   }
 }

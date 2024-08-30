@@ -1,85 +1,87 @@
-import 'package:crm_system/data/services/authentication/authentication_interceptor.dart';
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
+import 'package:millima/data/models/subject/subject_model.dart';
+import 'package:millima/utils/network/dio_client.dart';
 
 class SubjectService {
-  final Dio dio;
+  final dio = DioClient.dio;
 
-  SubjectService() : dio = Dio() {
-    dio.interceptors.add(AuthenticationInterceptor());
-  }
-
-  Future<void> addSubject(String name) async {
+  Future<List<SubjectModel>> getSubjects() async {
     try {
-      dio.options.headers['Content-Type'] = 'application/json';
+      final response = await dio.get("/subjects");
 
-      final data = {
-        "name": name,
-      };
+      print(response.data);
+      List<SubjectModel> loadedSubjects = [];
 
-      final response = await dio.post(
-        'http://millima.flutterwithakmaljon.uz/api/subjects',
-        data: data,
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        print('Subject added successfully');
-      } else {
-        print('Failed to add Subject: ${response.statusCode}');
-        throw 'Failed to add Subject: ${response.statusCode}';
+      for (var subject in response.data['data']) {
+        loadedSubjects.add(SubjectModel.fromJson(subject));
       }
-    } catch (e) {
-      print('Error adding Subject: $e');
-    }
-  }
 
-  Future<Map<String, dynamic>> getSubjects() async {
-    try {
-      final response = await dio.get(
-        'http://millima.flutterwithakmaljon.uz/api/subjects',
-      );
-
-      if (response.data['success'] == false) {
-        throw response.data;
-      }
-      return response.data;
+      return loadedSubjects;
+    } on DioException catch (error) {
+      throw error.response?.data;
     } catch (e) {
-      print('Error getting Subjects: $e');
       rethrow;
     }
   }
 
-  Future<void> updateSubject(int subjectId, String name) async {
+  Future<SubjectModel> getOneSubject(String subjectId) async {
     try {
-      final response = await dio.put(
-        'http://millima.flutterwithakmaljon.uz/api/subjects/$subjectId',
-        data: {
-          'name': name,
-        },
-      );
+      final response = await dio.get("/subjects/$subjectId");
 
-      if (response.statusCode == 200) {
-        print('Subject updated successfully');
-      } else {
-        print('Failed to update Subject: ${response.statusCode}');
-      }
+      print(response.data);
+
+      return SubjectModel.fromJson(response.data['data']);
+    } on DioException catch (error) {
+      throw error.response?.data;
     } catch (e) {
-      print('Error: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> addSubject(String subjectName) async {
+    try {
+      final response = await dio.post("/subjects", data: {'name': subjectName});
+
+      if (response.data['success'] != true) {
+        throw "Failed to add subject";
+      }
+    } on DioException catch (error) {
+      throw error.response?.data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> editSubject(int subjectId, String newName) async {
+    print(newName);
+    try {
+      final response = await dio.put("/subjects/$subjectId?name=$newName");
+
+      print(response.data);
+
+      if (response.data['success'] != true) {
+        throw "Failed to update subject";
+      }
+    } on DioException catch (error) {
+      throw error.response?.data;
+    } catch (e) {
+      rethrow;
     }
   }
 
   Future<void> deleteSubject(int subjectId) async {
     try {
-      final response = await dio.delete(
-        'http://millima.flutterwithakmaljon.uz/api/subjects/$subjectId',
-      );
+      final response = await dio.delete("/subjects/$subjectId");
 
-      if (response.statusCode == 200) {
-        print('Subject deleted successfully');
-      } else {
-        print('Failed to delete Subject: ${response.statusCode}');
+      if (response.data['success'] != true) {
+        throw "Failed to delete subject";
       }
+    } on DioException catch (error) {
+      throw error.response?.data;
     } catch (e) {
-      print('Error: $e');
+      rethrow;
     }
   }
 }

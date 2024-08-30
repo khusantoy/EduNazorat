@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:crm_system/data/models/models.dart';
-import 'package:crm_system/data/services/authentication/authentication_service.dart';
-import 'package:crm_system/data/services/authentication/local_authentication_service.dart';
+import 'package:millima/data/models/models.dart';
+import 'package:millima/data/services/authentication/authentication_service.dart';
+import 'package:millima/data/services/authentication/local_authentication_service.dart';
 
 class AuthenticationRepository {
   final AuthenticationServiceInterface _authenticationService;
@@ -35,7 +35,7 @@ class AuthenticationRepository {
   }
 
   Future<bool> checkAuthStatus() async {
-    final auth = await _localAuthenticationService.getAuth();
+    final auth = _localAuthenticationService.getAuth();
     return auth != null;
   }
 }

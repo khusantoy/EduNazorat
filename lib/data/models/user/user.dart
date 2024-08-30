@@ -1,4 +1,3 @@
-import 'package:crm_system/data/models/role/role.dart';
 import 'package:equatable/equatable.dart';
 
 import '../models.dart';
@@ -9,8 +8,6 @@ class User extends Equatable {
   final String? email;
   final String phone;
   final String? photo;
-  final DateTime createdAt;
-  final DateTime updatedAt;
   final int roleId;
   final Role role;
   const User({
@@ -19,8 +16,6 @@ class User extends Equatable {
     this.email,
     required this.phone,
     this.photo,
-    required this.createdAt,
-    required this.updatedAt,
     required this.roleId,
     required this.role,
   });
@@ -31,8 +26,6 @@ class User extends Equatable {
     String? email,
     String? phone,
     String? photo,
-    DateTime? createdAt,
-    DateTime? updatedAt,
     int? roleId,
     Role? role,
   }) {
@@ -42,8 +35,6 @@ class User extends Equatable {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       photo: photo ?? this.photo,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
       roleId: roleId ?? this.roleId,
       role: role ?? this.role,
     );
@@ -57,7 +48,7 @@ class User extends Equatable {
     result.addAll({'email': email});
     result.addAll({'phone': phone});
     result.addAll({'photo': photo});
-    result.addAll({'role_id': roleId});
+    result.addAll({'roleId': roleId});
     result.addAll({'role': role.toMap()});
 
     return result;
@@ -69,11 +60,11 @@ class User extends Equatable {
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       phone: map['phone'] ?? '',
-      photo: map['photo'] ?? '',
-      createdAt: DateTime.parse(map['created_at']),
-      updatedAt: DateTime.parse(map['updated_at']),
-      roleId: map['role_id']?.toInt() ?? 0,
-      role: Role.fromMap(map['role']),
+      photo: map['photo'] != null
+          ? "http://millima.flutterwithakmaljon.uz/storage/avatars/${map['photo']}"
+          : "https://avatars.mds.yandex.net/i?id=c2f3c4d99b491657b188c1ff06a764845d7ea559-5749428-images-thumbs&n=13",
+      roleId: map['role_id']?.toInt() ?? 1,
+      role: map['role'] == null ? Role.teacher() : Role.fromMap(map['role']),
     );
   }
 

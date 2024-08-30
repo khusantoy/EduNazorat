@@ -1,5 +1,5 @@
-import 'package:crm_system/data/models/auth/authentication_response.dart';
-import 'package:crm_system/utils/locator.dart';
+import 'package:millima/data/models/auth/authentication_response.dart';
+import 'package:millima/utils/di/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalAuthenticationService {

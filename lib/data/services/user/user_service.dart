@@ -1,12 +1,11 @@
-import 'package:crm_system/data/models/models.dart';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:crm_system/utils/network/dio_client.dart';
+import 'package:millima/data/models/models.dart';
+import 'package:millima/utils/network/dio_client.dart';
 
 abstract class UserServiceInterface {
   Future<User> getUser();
-  Future<List<User>> getStudents();
-  Future<List<User>> getTeachers();
-  Future<List<User>> getAdmins();
 }
 
 class UserService extends UserServiceInterface {
@@ -15,67 +14,79 @@ class UserService extends UserServiceInterface {
   @override
   Future<User> getUser() async {
     try {
-      final response = await dio.get('/user');
+      final response = await dio.get(
+        '/user',
+      );
+
+      if (response.data['success'] == false) {
+        throw response.data;
+      }
+
       return User.fromMap(response.data['data']);
-    } on DioException catch (e) {
-      throw e.response?.data;
+    } on DioException catch (error) {
+      throw error.message.toString();
     } catch (e) {
       rethrow;
     }
   }
 
-  @override
-  Future<List<User>> getStudents() async {
+  Future<List<User>> getUsers() async {
     try {
-      final response = await dio.get('/users', queryParameters: {"role_id": 1});
+      final response = await dio.get(
+        '/users',
+      );
 
-      List<User> students = [];
-
-      for (var element in response.data['data']) {
-        students.add(User.fromMap(element));
-      }
-
-      return students;
-    } on DioException catch (e) {
-      throw e.response?.data;
+      return List.from(
+        response.data['data'].map(
+          (user) => User.fromMap(user),
+        ),
+      );
+    } on DioException catch (error) {
+      throw error.message.toString();
     } catch (e) {
       rethrow;
     }
   }
 
-  @override
-  Future<List<User>> getTeachers() async {
+  Future<void> updateProfile({
+    required String name,
+    String? email,
+    required String phone,
+    File? photo,
+  }) async {
     try {
-      final response = await dio.get('/users', queryParameters: {"role_id": 2});
+      FormData formData = FormData();
 
-      List<User> teachers = [];
+      formData.fields.addAll([
+        MapEntry('name', name),
+        MapEntry('phone', phone),
+      ]);
 
-      for (var element in response.data['data']) {
-        teachers.add(User.fromMap(element));
+      if (email != null) {
+        formData.fields.add(MapEntry('email', email));
       }
 
-      return teachers;
-    } on DioException catch (e) {
-      throw e.response?.data;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<List<User>> getAdmins() async {
-    try {
-      final response = await dio.get('/users', queryParameters: {"role_id": 3});
-
-      List<User> admins = [];
-
-      for (var element in response.data['data']) {
-        admins.add(User.fromMap(element));
+      if (photo != null) {
+        formData.files.add(
+          MapEntry(
+            'photo',
+            await MultipartFile.fromFile(
+              photo.path,
+              filename: 'profile_photo.${photo.path.split('.').last}',
+            ),
+          ),
+        );
       }
 
-      return admins;
-    } on DioException catch (e) {
-      throw e.response?.data;
+      await dio.post(
+        "/profile/update",
+        data: formData,
+        options: Options(
+          contentType: 'multipart/form-data',
+        ),
+      );
+    } on DioException catch (error) {
+      throw error.message.toString();
     } catch (e) {
       rethrow;
     }
