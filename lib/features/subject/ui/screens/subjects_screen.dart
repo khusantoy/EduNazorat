@@ -10,7 +10,6 @@ class SubjectsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Subjects"),
-        centerTitle: true,
       ),
       drawer: const CustomDrawerForAdmin(),
       body: BlocBuilder<SubjectBloc, SubjectState>(

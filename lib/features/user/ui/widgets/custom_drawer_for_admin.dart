@@ -14,171 +14,170 @@ class CustomDrawerForAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
-        children: [
-          const DrawerHeader(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "MENU",
-                ),
-              ],
+      child: DrawerHeader(
+        child: Column(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.home),
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const AdminScreen();
+                    },
+                  ),
+                  (route) => false,
+                );
+              },
+              title: const Text(
+                "Bosh sahifa",
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
             ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return const AdminScreen();
-                  },
-                ),
-                (route) => false,
-              );
-            },
-            title: const Text(
-              "Home Page",
+            ListTile(
+              leading: const Icon(Icons.person),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const ProfileScreen();
+                    },
+                  ),
+                );
+              },
+              title: const Text(
+                "Profil",
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
             ),
-            trailing: const Icon(
-              Icons.keyboard_arrow_right,
+            ListTile(
+              leading: const Icon(Icons.group),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const ShowUsersScreen(
+                        roleId: 1,
+                      );
+                    },
+                  ),
+                );
+              },
+              title: const Text(
+                "O'quvchilar",
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
             ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return const ProfileScreen();
-                  },
-                ),
-              );
-            },
-            title: const Text(
-              "Profile",
+            ListTile(
+              leading: const Icon(Icons.group),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const ShowUsersScreen(
+                        roleId: 2,
+                      );
+                    },
+                  ),
+                );
+              },
+              title: const Text(
+                "O'qituvchilar",
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
             ),
-            trailing: const Icon(
-              Icons.keyboard_arrow_right,
+            ListTile(
+              leading: const Icon(Icons.group),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const ShowUsersScreen(
+                        roleId: 3,
+                      );
+                    },
+                  ),
+                );
+              },
+              title: const Text(
+                "Adminlar",
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
             ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return const ShowUsersScreen(
-                      roleId: 1,
-                    );
-                  },
-                ),
-              );
-            },
-            title: const Text(
-              "Students",
+            ListTile(
+              leading: const Icon(Icons.group_add),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const AddGroupScreen();
+                    },
+                  ),
+                );
+              },
+              title: const Text(
+                "Gurux qo'shish",
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
             ),
-            trailing: const Icon(
-              Icons.keyboard_arrow_right,
+            ListTile(
+              leading: const Icon(Icons.meeting_room_rounded),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const RoomScreen();
+                    },
+                  ),
+                );
+              },
+              title: const Text(
+                "Xonalar",
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
             ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return const ShowUsersScreen(
-                      roleId: 2,
-                    );
-                  },
-                ),
-              );
-            },
-            title: const Text(
-              "Teachers",
+            ListTile(
+              leading: const Icon(Icons.subject),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const SubjectsScreen();
+                    },
+                  ),
+                );
+              },
+              title: const Text(
+                "Fanlar",
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
             ),
-            trailing: const Icon(
-              Icons.keyboard_arrow_right,
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return const ShowUsersScreen(
-                      roleId: 3,
-                    );
-                  },
-                ),
-              );
-            },
-            title: const Text(
-              "Admins",
-            ),
-            trailing: const Icon(
-              Icons.keyboard_arrow_right,
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return const AddGroupScreen();
-                  },
-                ),
-              );
-            },
-            title: const Text(
-              "Add Group",
-            ),
-            trailing: const Icon(
-              Icons.keyboard_arrow_right,
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return const RoomScreen();
-                  },
-                ),
-              );
-            },
-            title: const Text(
-              "Rooms",
-            ),
-            trailing: const Icon(
-              Icons.keyboard_arrow_right,
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return const SubjectsScreen();
-                  },
-                ),
-              );
-            },
-            title: const Text(
-              "Subjects",
-            ),
-            trailing: const Icon(
-              Icons.keyboard_arrow_right,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

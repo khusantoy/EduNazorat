@@ -64,7 +64,6 @@ class _AddTimetableScreenState extends State<AddTimetableScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text("Add Timetable"),
         backgroundColor: Colors.blue.shade700,
       ),

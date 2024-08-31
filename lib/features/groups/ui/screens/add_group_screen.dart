@@ -29,7 +29,6 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text(
           "Add Group",
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),

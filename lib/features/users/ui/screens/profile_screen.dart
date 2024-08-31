@@ -41,174 +41,161 @@ class _UserProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              size: 30,
-            )),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
+        ),
         title: const Text(
           "Profile Screen",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
-        centerTitle: true,
       ),
       body: BlocBuilder<UserBloc, UserState>(
-          bloc: context.read<UserBloc>()..add(GetUserEvent()),
-          builder: (context, state) {
-            if (state is UserLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is UserLoadedState) {
-              nameEditingController.text = state.user.name;
-              phoneEditingController.text = state.user.phone;
-              emailEditingController.text = state.user.email ?? "";
-              return Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Stack(
-                              children: [
-                                Container(
-                                    width: 150,
-                                    height: 150,
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color:
-                                            Color.fromARGB(255, 218, 214, 214)),
-                                    clipBehavior: Clip.hardEdge,
-                                    child: state.user.photo == null
-                                        ? imageFile == null
-                                            ? Image.asset(
-                                                "assets/profile_logo.png",
-                                                fit: BoxFit.cover)
-                                            : Image.file(
-                                                imageFile!,
-                                                fit: BoxFit.cover,
-                                              )
-                                        : imageFile != null
-                                            ? Image.file(
-                                                imageFile!,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.network(
-                                                fit: BoxFit.cover,
-                                                "${state.user.photo}")),
-                                Positioned(
-                                  right: 0,
-                                  bottom: 5,
-                                  child: IconButton(
-                                      onPressed: openGallery,
-                                      icon: const Icon(
-                                        Icons.edit_square,
-                                        color: Colors.blue,
-                                        size: 30,
-                                      )),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: nameEditingController,
-                          decoration: InputDecoration(
-                            labelText: "Name",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
+        bloc: context.read<UserBloc>()..add(GetUserEvent()),
+        builder: (context, state) {
+          if (state is UserLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is UserLoadedState) {
+            nameEditingController.text = state.user.name;
+            phoneEditingController.text = state.user.phone;
+            emailEditingController.text = state.user.email ?? "";
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                width: 150,
+                                height: 150,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color.fromARGB(255, 218, 214, 214),
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                                child: state.user.photo == null
+                                    ? imageFile == null
+                                        ? Image.asset("assets/profile_logo.png",
+                                            fit: BoxFit.cover)
+                                        : Image.file(
+                                            imageFile!,
+                                            fit: BoxFit.cover,
+                                          )
+                                    : imageFile != null
+                                        ? Image.file(
+                                            imageFile!,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.network(
+                                            fit: BoxFit.cover,
+                                            "${state.user.photo}",
+                                          ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                bottom: 5,
+                                child: IconButton.filled(
+                                  onPressed: openGallery,
+                                  icon: const Icon(
+                                    Icons.camera_alt,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return "Ismingizni kiriting";
-                            }
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: nameEditingController,
+                        decoration: const InputDecoration(
+                          labelText: "Name",
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Ismingizni kiriting";
+                          }
 
-                            return null;
-                          },
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: phoneEditingController,
+                        decoration: const InputDecoration(
+                          labelText: "Phone Number",
+                          border: OutlineInputBorder(),
                         ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: phoneEditingController,
-                          decoration: InputDecoration(
-                            labelText: "Phone Number",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return "Telefon raqamingizni kiriting";
-                            }
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Telefon raqamingizni kiriting";
+                          }
 
-                            return null;
-                          },
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: emailEditingController,
+                        decoration: const InputDecoration(
+                          labelText: "Email",
+                          border: OutlineInputBorder(),
                         ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: emailEditingController,
-                          decoration: InputDecoration(
-                            labelText: "Email",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return "Emailingizni kiriting";
-                            }
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Emailingizni kiriting";
+                          }
 
-                            return null;
-                          },
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<UserBloc>().add(
+                                  UpdateUserEvent(
+                                    name: nameEditingController.text,
+                                    phone: phoneEditingController.text,
+                                    email: emailEditingController.text,
+                                    phote: imageFile,
+                                  ),
+                                );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
                         ),
-                        const SizedBox(height: 15),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              context.read<UserBloc>().add(
-                                    UpdateUserEvent(
-                                      name: nameEditingController.text,
-                                      phone: phoneEditingController.text,
-                                      email: emailEditingController.text,
-                                      phote: imageFile,
-                                    ),
-                                  );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              padding:
-                                  const EdgeInsets.fromLTRB(30, 10, 30, 10)),
-                          child: const Text(
-                            "Update",
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white),
-                          ),
-                        )
-                      ],
-                    ),
+                        child: const Text("Update"),
+                      )
+                    ],
                   ),
                 ),
-              );
-            } else if (state is UserErrorState) {
-              return Center(
-                child: Text(state.error),
-              );
-            } else {
-              return const Center(
-                child: Text("User Topilmadi"),
-              );
-            }
-          }),
+              ),
+            );
+          } else if (state is UserErrorState) {
+            return Center(
+              child: Text(state.error),
+            );
+          } else {
+            return const Center(
+              child: Text("User Topilmadi"),
+            );
+          }
+        },
+      ),
     );
   }
 }

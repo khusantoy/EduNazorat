@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDc3tHc6GyLQbxCeNKUZDyqALbSDbxmwQA',
-    appId: '1:173229360620:android:f632abc911b3ac6879acc9',
-    messagingSenderId: '173229360620',
-    projectId: 'bear-f602f',
-    storageBucket: 'bear-f602f.appspot.com',
+    apiKey: 'AIzaSyCRGymwYQUFt50zuYC-dfe8Xo6x6U8Oy2M',
+    appId: '1:259066762287:android:93a305e2470d93bbeb22da',
+    messagingSenderId: '259066762287',
+    projectId: 'edunazorat',
+    storageBucket: 'edunazorat.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCBXQp5c9XYvgyagPetRSdyB1sXUeOGdr8',
-    appId: '1:173229360620:ios:f7477533149651ab79acc9',
-    messagingSenderId: '173229360620',
-    projectId: 'bear-f602f',
-    storageBucket: 'bear-f602f.appspot.com',
-    iosClientId: '173229360620-dmurh6j7cj461c5uhfqurdhg0lg9ihrc.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDdS4Q23_L8VM6x5z7poSGjGqPRbLSdOdk',
+    appId: '1:259066762287:ios:1f04291ddb04b23feb22da',
+    messagingSenderId: '259066762287',
+    projectId: 'edunazorat',
+    storageBucket: 'edunazorat.appspot.com',
+    iosClientId: '259066762287-b4ihhqgd4lihp8c8f6fe8g6cf437k0r0.apps.googleusercontent.com',
     iosBundleId: 'com.example.crmSystem',
   );
 

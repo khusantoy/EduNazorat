@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:millima/data/models/models.dart';
 import 'package:millima/features/features.dart';
+
 class AddAndEditSubjectScreen extends StatefulWidget {
   const AddAndEditSubjectScreen({super.key, required this.subject});
 
@@ -29,7 +30,6 @@ class _AddAndEditSubjectScreenState extends State<AddAndEditSubjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: Text(
             widget.subject == null ? "Add Subject Screen" : "Edit Subject"),
       ),

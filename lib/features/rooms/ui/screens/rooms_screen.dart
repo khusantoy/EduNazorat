@@ -6,7 +6,6 @@ import 'package:millima/features/rooms/bloc/room_state.dart';
 import 'package:millima/features/rooms/ui/screens/manage_rooms.dart';
 import 'package:millima/features/user/ui/widgets/custom_drawer_for_admin.dart';
 
-
 class RoomScreen extends StatefulWidget {
   const RoomScreen({super.key});
 
@@ -29,7 +28,6 @@ class _RoomScreenState extends State<RoomScreen> {
           "Rooms",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
         ),
-        centerTitle: true,
       ),
       drawer: const CustomDrawerForAdmin(),
       body: BlocBuilder<RoomBloc, RoomState>(builder: (context, state) {

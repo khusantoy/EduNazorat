@@ -14,7 +14,6 @@ class GetGroupTimetablesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text("Group Timetables"),
         backgroundColor: Colors.blue.shade700,
       ),
@@ -30,9 +29,7 @@ class GetGroupTimetablesScreen extends StatelessWidget {
                 ),
               );
             } else if (state is TimeTableLoadedState) {
-              return _buildTimetable(
-                  context,
-                  state.timeTables?.weekDays);
+              return _buildTimetable(context, state.timeTables?.weekDays);
             } else if (state is TimeTableErrorState) {
               return Center(
                 child: Text(
@@ -91,9 +88,7 @@ class GetGroupTimetablesScreen extends StatelessWidget {
                   ),
                 ),
                 const Divider(color: Colors.black54),
-                ...sessions
-                    .map((session) => _buildSessionItem(session))
-                    ,
+                ...sessions.map((session) => _buildSessionItem(session)),
               ],
             ),
           ),

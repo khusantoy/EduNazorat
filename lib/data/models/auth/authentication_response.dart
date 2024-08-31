@@ -28,5 +28,6 @@ class AuthenticationResponse extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory AuthenticationResponse.fromJson(String source) => AuthenticationResponse.fromMap(json.decode(source));
+  factory AuthenticationResponse.fromJson(String source) =>
+      AuthenticationResponse.fromMap(json.decode(source));
 }

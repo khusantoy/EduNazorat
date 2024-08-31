@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "173229360620",
-    "project_id": "bear-f602f",
-    "storage_bucket": "bear-f602f.appspot.com"
+    "project_number": "259066762287",
+    "project_id": "edunazorat",
+    "storage_bucket": "edunazorat.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:173229360620:android:f632abc911b3ac6879acc9",
+        "mobilesdk_app_id": "1:259066762287:android:93a305e2470d93bbeb22da",
         "android_client_info": {
-          "package_name": "com.example.crm_system"
+          "package_name": "uz.xusanboy.edunazorat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "173229360620-qf9o6buj52cajak1ujpoccv73u3i7i28.apps.googleusercontent.com",
+          "client_id": "259066762287-3veduipp4ne4db5udmjpc9tdenl74q16.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDc3tHc6GyLQbxCeNKUZDyqALbSDbxmwQA"
+          "current_key": "AIzaSyCRGymwYQUFt50zuYC-dfe8Xo6x6U8Oy2M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "173229360620-qf9o6buj52cajak1ujpoccv73u3i7i28.apps.googleusercontent.com",
+              "client_id": "259066762287-3veduipp4ne4db5udmjpc9tdenl74q16.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "173229360620-dmurh6j7cj461c5uhfqurdhg0lg9ihrc.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.crmSystem"
-              }
             }
           ]
         }

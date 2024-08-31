@@ -30,16 +30,9 @@ class _UserScreenState extends State<UserScreen> {
               ),
             );
           },
-          icon: const Icon(
-            Icons.person,
-            size: 30,
-          ),
+          icon: const Icon(Icons.person),
         ),
-        title: const Text(
-          'Home',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: const Text('Bosh sahifa'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -72,7 +65,7 @@ class _UserScreenState extends State<UserScreen> {
             );
           }
           return const Center(
-            child: Text("No groups available!"),
+            child: Text("Guruxlar mavjud emas!"),
           );
         },
       ),

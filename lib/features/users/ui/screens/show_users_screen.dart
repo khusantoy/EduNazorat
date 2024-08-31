@@ -31,7 +31,6 @@ class _ShowUsersScreenState extends State<ShowUsersScreen> {
                   : "Admins",
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
         ),
-        centerTitle: true,
       ),
       body: BlocBuilder<UsersBloc, UsersState>(builder: (context, state) {
         if (state is UsersLoadingState) {

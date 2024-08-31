@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:millima/data/models/models.dart';
-import 'package:millima/features/authentication/bloc/authentication_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:millima/data/models/auth/register_request.dart';
+import 'package:millima/features/authentication/authentication.dart';
+import 'package:millima/utils/colors.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -11,11 +13,16 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
+  bool visibilityPassword = true;
+  bool visibilityPasswordConfimation = true;
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
       TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   int _selectedRoleIndex = 1;
   final List<String> _roles = [
@@ -23,6 +30,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     'Teacher',
     'Admin',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    phoneController.text = "+998";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,115 +46,462 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Register'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Phone Number',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _confirmPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Confirm Password',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              StatefulBuilder(builder: (context, setState) {
-                return Column(
+        resizeToAvoidBottomInset:
+            true, // Klaviatura ochilganda tepaga scroll qilish
+        backgroundColor: AppColors.customBlueWhiter,
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
                   children: [
-                    DropdownButtonFormField<int>(
-                      value: _selectedRoleIndex,
-                      decoration: const InputDecoration(
-                        labelText: 'Role',
-                        border: OutlineInputBorder(),
-                      ),
-                      items: [
-                        for (var index = 0; index < _roles.length; index++)
-                          DropdownMenuItem<int>(
-                            value: index + 1,
-                            child: Text(_roles[index]),
-                          )
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedRoleIndex = value!;
-                        });
-                      },
+                    const SizedBox(
+                      height: 30,
                     ),
-                    const SizedBox(height: 32.0),
-                    FilledButton(
-                      onPressed: () {
-                        // Handle registration logic
-                        final name = _nameController.text;
-                        final phone = _phoneController.text;
-                        final password = _passwordController.text;
-                        final confirmPassword = _confirmPasswordController.text;
-                        final role = _selectedRoleIndex;
-
-                        if (password != confirmPassword) {
-                          // Show error
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Passwords do not match!')),
-                          );
-                        } else {
-                          context.read<AuthenticationBloc>().add(
-                                RegisterEvent(
-                                  request: RegisterRequest(
-                                    name: name,
-                                    phone: phone,
-                                    password: password,
-                                    passwordConfirmation: confirmPassword,
-                                    roleId: role,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset("assets/images/company_logo.svg"),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        const Text(
+                          "EduNazorat",
+                          style: TextStyle(
+                            color: AppColors.customBlue,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFC4CBD6).withOpacity(0.1),
+                            offset: const Offset(0, 6),
+                            blurRadius: 58,
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Ro'yhatdan o'tish",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.customBlack,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          const Text(
+                            "Foydalanuvchi ismi",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.customGray,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          TextFormField(
+                            controller: nameController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
+                                ),
+                              ),
+                              hintText: "Ismingiz",
+                              hintStyle: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.customGray,
+                              ),
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Ismingizni kiriting";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Text(
+                            "Mobil Raqam",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.customGray,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: phoneController,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Color(0xFFD8E0F0),
+                                ),
+                              ),
+                              hintText: "+998 90 000 00 00",
+                              hintStyle: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.customGray,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
+                                ),
+                              ),
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Raqamingizni kiriting";
+                              } else if (int.tryParse(value) == null) {
+                                return "Raqam kiriting";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Text(
+                            "Parol yarating",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.customGray,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          TextFormField(
+                            controller: passwordController,
+                            obscureText: visibilityPassword,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
+                                ),
+                              ),
+                              hintText: "••••••••",
+                              hintStyle: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.customGray,
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    visibilityPassword = !visibilityPassword;
+                                  });
+                                },
+                                icon: Icon(
+                                  visibilityPassword
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: AppColors.customGray,
+                                ),
+                              ),
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Parol yarating";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Text(
+                            "Parolni tasdiqlang",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.customGray,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          TextFormField(
+                            controller: confirmPasswordController,
+                            obscureText: visibilityPasswordConfimation,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: AppColors.customBorderGray,
+                                ),
+                              ),
+                              hintText: "••••••••",
+                              hintStyle: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.customGray,
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    visibilityPasswordConfimation =
+                                        !visibilityPasswordConfimation;
+                                  });
+                                },
+                                icon: Icon(
+                                  visibilityPasswordConfimation
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: AppColors.customGray,
+                                ),
+                              ),
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Parolni tasdiqlang";
+                              } else if (passwordController.text !=
+                                  confirmPasswordController.text) {
+                                return "Parol mos emas";
+                              }
+                              return null;
+                            },
+                          ),
+                          StatefulBuilder(builder: (context, setState) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                const Text(
+                                  "Maqomingizni tanlang",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.customGray,
                                   ),
                                 ),
-                              );
-                        }
-                      },
-                      child: const Text('Register'),
-                    ),
+                                const SizedBox(
+                                  height: 7,
+                                ),
+                                DropdownButtonFormField<int>(
+                                  value: _selectedRoleIndex,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        width: 1,
+                                        color: AppColors.customBorderGray,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                        width: 1,
+                                        color: AppColors.customBorderGray,
+                                      ),
+                                    ),
+                                  ),
+                                  items: [
+                                    for (var index = 0;
+                                        index < _roles.length;
+                                        index++)
+                                      DropdownMenuItem<int>(
+                                        value: index + 1,
+                                        child: Text(_roles[index]),
+                                      )
+                                  ],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedRoleIndex = value!;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  height: 55,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.customBlue,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      final String name = nameController.text;
+                                      final String phone = phoneController.text;
+                                      final String password =
+                                          passwordController.text;
+                                      final String passwordConfirmation =
+                                          confirmPasswordController.text;
+                                      final role = _selectedRoleIndex;
+
+                                      if (_formKey.currentState!.validate()) {
+                                        context.read<AuthenticationBloc>().add(
+                                              RegisterEvent(
+                                                request: RegisterRequest(
+                                                  name: name,
+                                                  phone: phone,
+                                                  password: password,
+                                                  passwordConfirmation:
+                                                      passwordConfirmation,
+                                                  roleId: role,
+                                                ),
+                                              ),
+                                            );
+                                      }
+                                    },
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Ro'yhatdan o'tish",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 7,
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_rounded,
+                                          size: 20,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                "Kirish",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.customBlue,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton.outlined(
+                                onPressed: () {
+                                  context.read<AuthenticationBloc>().add(
+                                      SocialLoginEvent(
+                                          type: SocialLoginTypes.google));
+                                },
+                                icon: Image.asset(
+                                  "assets/images/google.png",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                              IconButton.outlined(
+                                onPressed: () {
+                                  context.read<AuthenticationBloc>().add(
+                                      SocialLoginEvent(
+                                          type: SocialLoginTypes.facebook));
+                                },
+                                icon: Image.asset(
+                                  "assets/images/facebook.png",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
                   ],
-                );
-              }),
-              TextButton(
-                onPressed: () {
-                  // Navigate back to login screen
-                  Navigator.pop(context);
-                },
-                child: const Text('Back to Login'),
+                ),
               ),
-            ],
+            ),
           ),
         ),
       ),

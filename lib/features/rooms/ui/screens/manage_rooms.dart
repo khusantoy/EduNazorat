@@ -36,7 +36,6 @@ class _ManageRoomState extends State<ManageRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: Text(
           widget.roomModel == null ? "Add Room" : "Edit Room",
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),

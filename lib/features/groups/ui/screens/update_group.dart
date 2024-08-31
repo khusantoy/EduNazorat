@@ -50,7 +50,6 @@ class _UpdateGroupState extends State<UpdateGroup> {
       },
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           title: const Text(
             "Edit Group",
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),

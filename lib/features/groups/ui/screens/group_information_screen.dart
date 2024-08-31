@@ -9,11 +9,7 @@ class GroupInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          groupModel.name,
-          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-        ),
+        title: Text(groupModel.name),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

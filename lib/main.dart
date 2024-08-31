@@ -74,7 +74,7 @@ class MainApp extends StatelessWidget {
               }
             }
             if (state.status == AuthenticationStatus.unauthenticated) {
-              return LoginScreen();
+              return const LoginScreen();
             }
 
             return const SplashScreen();

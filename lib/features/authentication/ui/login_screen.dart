@@ -1,149 +1,300 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:millima/data/models/auth/login_request.dart';
-import 'package:millima/features/authentication/bloc/authentication_bloc.dart';
+import 'package:millima/features/authentication/authentication.dart';
+import 'package:millima/utils/colors.dart';
 
-import 'register_screen.dart';
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-class LoginScreen extends StatelessWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool visibilityPassword = true;
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  LoginScreen({super.key});
+  @override
+  void initState() {
+    super.initState();
+    _phoneController.text = "+998";
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.surface,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    labelText: 'Phone Number',
-                    border: OutlineInputBorder(),
+      resizeToAvoidBottomInset:
+          true, // Klaviatura ochilganda tepaga scroll qilish
+      backgroundColor: AppColors.customBlueWhiter,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
                   ),
-                ),
-                const SizedBox(height: 16.0),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset("assets/images/company_logo.svg"),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      const Text(
+                        "EduNazorat",
+                        style: TextStyle(
+                          color: AppColors.customBlue,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                const SizedBox(height: 32.0),
-                FilledButton(
-                  onPressed: () {
-                    // Handle login logic
-                    final phone = _phoneController.text;
-                    final password = _passwordController.text;
-
-                    context.read<AuthenticationBloc>().add(LoginEvent(
-                          request: LoginRequest(
-                            phone: phone,
-                            password: password,
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFC4CBD6).withOpacity(0.1),
+                          offset: const Offset(0, 6),
+                          blurRadius: 58,
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Dasturga kirish",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.customBlack,
+                            ),
                           ),
-                        ));
-                  },
-                  child: const Text('Login'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Navigate to register screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegisterScreen()),
-                    );
-                  },
-                  child: const Text('Register'),
-                ),
-                const SizedBox(height: 20),
-                OutlinedButton(
-                  onPressed: () async {
-                    context
-                        .read<AuthenticationBloc>()
-                        .add(SocialLoginEvent(type: SocialLoginTypes.google));
-                  },
-                  child: const Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Icon(
-                          Icons.facebook,
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text('Google'),
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                OutlinedButton(
-                  onPressed: () {
-                    context
-                        .read<AuthenticationBloc>()
-                        .add(SocialLoginEvent(type: SocialLoginTypes.facebook));
-                  },
-                  child: const Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Icon(
-                          Icons.facebook,
+                        const SizedBox(
+                          height: 26,
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text('Facebook'),
-                      )
-                    ],
-                  ),
-                ),
-                // const SizedBox(height: 10),
-                // OutlinedButton(
-                //   onPressed: () {
-                //     // Handle login logic
-                //     final phone = _phoneController.text;
-                //     final password = _passwordController.text;
+                        const Text(
+                          "Telefon Raqam",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.customGray,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 7,
+                        ),
+                        TextFormField(
+                          controller: _phoneController,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: AppColors.customBorderGray,
+                              ),
+                            ),
+                            hintText: "998 90 000 00 00",
+                            hintStyle: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.customGray,
+                            ),
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (value!.isEmpty || value == "+998") {
+                              return "Raqam kiritilmadi";
+                            } else if (int.tryParse(value) == null) {
+                              return "Ma'lumot xato";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text(
+                          "Parol",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.customGray,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 7,
+                        ),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: visibilityPassword,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: AppColors.customBorderGray,
+                              ),
+                            ),
+                            hintText: "••••••••",
+                            hintStyle: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.customGray,
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  visibilityPassword = !visibilityPassword;
+                                });
+                              },
+                              icon: Icon(
+                                visibilityPassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: AppColors.customGray,
+                              ),
+                            ),
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Parol kiritilmadi";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 27,
+                        ),
+                        SizedBox(
+                          height: 48,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.customBlue,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                final phone = _phoneController.text;
+                                final password = _passwordController.text;
 
-                //     context.read<AuthenticationBloc>().add(LoginEvent(
-                //           request: LoginRequest(
-                //             phone: phone,
-                //             password: password,
-                //           ),
-                //         ));
-                //   },
-                //   child: const Stack(
-                //     children: [
-                //       Align(
-                //         alignment: Alignment.centerLeft,
-                //         child: Icon(
-                //           Icons.facebook,
-                //         ),
-                //       ),
-                //       Align(
-                //         alignment: Alignment.center,
-                //         child: Text('Github'),
-                //       )
-                //     ],
-                //   ),
-                // ),
-              ],
+                                context.read<AuthenticationBloc>().add(
+                                      LoginEvent(
+                                        request: LoginRequest(
+                                          phone: phone,
+                                          password: password,
+                                        ),
+                                      ),
+                                    );
+                              }
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Kirish",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_rounded,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "Ro'yhatdan o'tish",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.customBlue,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton.outlined(
+                              onPressed: () {
+                                context.read<AuthenticationBloc>().add(
+                                    SocialLoginEvent(
+                                        type: SocialLoginTypes.google));
+                              },
+                              icon: Image.asset(
+                                "assets/images/google.png",
+                                width: 20,
+                                height: 20,
+                              ),
+                            ),
+                            IconButton.outlined(
+                              onPressed: () {
+                                context.read<AuthenticationBloc>().add(
+                                    SocialLoginEvent(
+                                        type: SocialLoginTypes.facebook));
+                              },
+                              icon: Image.asset(
+                                "assets/images/facebook.png",
+                                width: 20,
+                                height: 20,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

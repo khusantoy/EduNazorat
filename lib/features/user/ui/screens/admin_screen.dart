@@ -24,10 +24,8 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF4F9FD),
       drawer: const CustomDrawerForAdmin(),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -37,34 +35,25 @@ class _AdminScreenState extends State<AdminScreen> {
             },
           ),
         ],
-        title: const Text(
-          "Admin Panel",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: const Text("Admin Oynasi"),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 45,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.grey),
+            padding: const EdgeInsets.only(
+              bottom: 10,
+              left: 15,
+              right: 15,
+            ),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                hintText: 'Guruhlarni izlash',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
               ),
-              child: TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: 'Search groups...',
-                  border: InputBorder.none,
-                  icon: Icon(Icons.search),
-                ),
-                onChanged: (value) {
-                  context.read<GroupBloc>().add(GetGroupsEvent());
-                },
-              ),
+              onChanged: (value) {
+                context.read<GroupBloc>().add(GetGroupsEvent());
+              },
             ),
           ),
         ),
@@ -90,206 +79,176 @@ class _AdminScreenState extends State<AdminScreen> {
                       .contains(_searchController.text.toLowerCase()))
                   .toList();
 
-          if (groups.isEmpty) {
-            return const Center(
-              child: Text('No groups found.'),
-            );
-          }
+          return groups.isEmpty
+              ? const Center(
+                  child: Text("Guruhlar topilmadi"),
+                )
+              : ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+                  itemCount: groups.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onLongPress: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  actionsPadding: const EdgeInsets.all(8),
+                                  title: Text(groups[index].name),
+                                  actions: [
+                                    Row(
+                                      children: [
+                                        TextButton.icon(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      UpdateGroup(
+                                                          group: groups[index]),
+                                                ));
+                                          },
+                                          label: const Text("Edit Group"),
+                                          icon: const Icon(Icons.edit_document),
+                                        ),
+                                        TextButton.icon(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AddStudentToGroupScreen(
+                                                          groupModel:
+                                                              groups[index]),
+                                                ));
+                                          },
+                                          label: const Text("Add Students"),
+                                          icon: const Icon(Icons.person_add),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                );
+                              });
+                        },
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GroupInformationScreen(
+                                  groupModel: groups[index],
+                                ),
+                              ));
+                        },
+                        child: Card(
+                          color: Colors.blue.shade100,
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(Icons.group),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      groups[index].name,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
 
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: groups.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onLongPress: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            actionsPadding: const EdgeInsets.all(8),
-                            title: Text(groups[index].name),
-                            actions: [
-                              Row(
-                                children: [
-                                  TextButton.icon(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => UpdateGroup(
-                                                group: groups[index]),
-                                          ));
-                                    },
-                                    label: const Text("Edit Group"),
-                                    icon: const Icon(Icons.edit_document),
-                                  ),
-                                  TextButton.icon(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
+                                Row(
+                                  children: [
+                                    const Icon(Icons.person),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        "Asosiy ustoz: ${groups[index].mainTeacher.name}",
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.person_outline),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        "Yordamchi Ustoz: ${groups[index].assistantTeacher.name}",
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                    height:
+                                        20), // Add spacing between the details and the buttons
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                AddStudentToGroupScreen(
-                                                    groupModel: groups[index]),
-                                          ));
-                                    },
-                                    label: const Text("Add Students"),
-                                    icon: const Icon(Icons.person_add),
-                                  ),
-                                ],
-                              )
-                            ],
-                          );
-                        });
-                  },
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GroupInformationScreen(
-                            groupModel: groups[index],
+                                                GetGroupTimetablesScreen(
+                                              groupId: groups[index].id,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      icon: const Icon(Icons.schedule),
+                                      label: const Text('Dars jadvali'),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        // Add logic to add a timetable
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddTimetableScreen(
+                                                        groupId:
+                                                            groups[index].id)));
+                                      },
+                                      icon: const Icon(Icons.add),
+                                      label:
+                                          const Text("Dars jadvali qo'shish"),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.blue.shade700,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ));
                   },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 15),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.blue.shade700,
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          offset: Offset(0, 4),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.group,
-                                color: Colors.white, size: 28),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                "Group Name: ${groups[index].name}",
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Divider(
-                            color: Colors.white38, thickness: 1, height: 20),
-                        Row(
-                          children: [
-                            const Icon(Icons.person,
-                                color: Colors.white, size: 24),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                "Main Teacher: ${groups[index].mainTeacher.name}",
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white70,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(Icons.person_outline,
-                                color: Colors.white, size: 24),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                "Assistant Teacher: ${groups[index].assistantTeacher.name}",
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white70,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                            height:
-                                20), // Add spacing between the details and the buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        GetGroupTimetablesScreen(
-                                      groupId: groups[index].id,
-                                    ),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(Icons.schedule),
-                              label: const Text('View Timetables'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.blue.shade700,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                // Add logic to add a timetable
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            AddTimetableScreen(
-                                                groupId: groups[index].id)));
-                              },
-                              icon: const Icon(Icons.add),
-                              label: const Text('Add Timetable'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.blue.shade700,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ));
-            },
-          );
+                );
         }
         return const Center(
           child: Text("Grouplar topilmadi!"),
